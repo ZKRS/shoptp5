@@ -140,8 +140,8 @@ return [
 
     // 视图输出字符串内容替换
     'view_replace_str'       => [
-        '__INDEX__'=>'/shoptp5/public/static/index',
-        '__ADMIN__'=>'/shoptp5/public/static/admin'
+        '__INDEX__'=>'/shoptp/public/static/index',
+        '__ADMIN__'=>'/shoptp/public/static/admin'
     ],
     // 默认跳转页面对应的模板文件
     'dispatch_success_tmpl'  => THINK_PATH . 'tpl' . DS . 'dispatch_jump.tpl',
