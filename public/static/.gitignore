@@ -1,2 +1,4 @@
 *
-!.gitignore admin index
+!.gitignore
+!admin
+!index
