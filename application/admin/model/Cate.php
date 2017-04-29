@@ -24,6 +24,4 @@ class Cate extends \think\Model
         return $arr;
 
    }
-
-
 }
