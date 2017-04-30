@@ -16,7 +16,11 @@ class Cate extends \think\Model
        static $arr = array();
        foreach ($cate_list as $key => $value){
            if($value['cate_pid']==$pid){
-               $value['str']=str_repeat('----',$value['cate_level']);
+               if($pid!=1){
+                   $value['str']=str_repeat('----',$value['cate_level']-1);
+               }else{
+                   $value['str']="";
+               }
                $arr[]=$value;
                $this->getChildrenId($cate_list,$value['id_cate']);
            }

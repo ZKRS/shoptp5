@@ -32,6 +32,14 @@ class Cate extends \think\Controller
         return view('cate/catelist');
     }
     public function add(){
+        $cate_select=db('cate')->select();
+        $cate_model=model('Cate');
+        $cate_list=$cate_model->getChildrenId($cate_select);
+        $this->assign('cate_list',$cate_list);
         return view('cate/add');
+    }
+    public function addhandle(){
+        $post=request()->post();
+        dump($post);
     }
 }
