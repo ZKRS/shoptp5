@@ -114,7 +114,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="cate_name"> 分类名称 </label>
 
                             <div class="col-sm-9">
-                                <input type="text" id="cate_name" name="cate_name" placeholder="输入分类名称" class="col-xs-10 col-sm-5">
+                                <input type="text" id="cate_name" name="cate_name" placeholder="输入分类名称" class="col-xs-10 col-sm-5" type="text" value="{$cate_find.cate_name}">
                             </div>
                         </div>
                         <div class="space-4"></div>
@@ -123,7 +123,7 @@
                             <div class="col-sm-4">
                                 <select class="form-control" id="pid" name="cate_pid">
                                     <option value="0">顶级分类</option>
-                                    {volist name="cate_list" id="vo"}
+                                    {volist name="cate_list" id="vo"}s
                                     <option value="{$vo.id_cate}">{$vo.str}{$vo.cate_name}</option>
                                     {/volist}
                                 </select>
