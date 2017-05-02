@@ -62,18 +62,18 @@ class Cate extends \think\Controller
      */
     public function update($id_cate)
     {
-        if($id_cate==""){
+        if ($id_cate == "") {
             $this->redirect('cate/catelist');
         }
-        $cate_find=db('cate')->find($id_cate);
-        if($cate_find==""){
+        $cate_find = db('cate')->find($id_cate);
+        if ($cate_find == "") {
             $this->redirect('cate/catelist');
         }
         $cate_select = db('cate')->select();
         $cate_model = model('Cate');
         $cate_list = $cate_model->getChildrenId($cate_select);
         $this->assign('cate_list', $cate_list);
-        $this->assign('cate_find',$cate_find);
+        $this->assign('cate_find', $cate_find);
         return view('cate/update');
     }
 }

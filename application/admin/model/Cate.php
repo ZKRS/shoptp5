@@ -21,7 +21,7 @@ class Cate extends \think\Model
                 $value['cate_level'] = $level;
                 $value['str'] = str_repeat('----', $value['cate_level'] - 1);
                 $arr[] = $value;
-                $this->getChildrenId($cate_list, $value['id_cate'],$level+1);
+                $this->getChildrenId($cate_list, $value['id_cate'], $level + 1);
             }
         }
         return $arr;
