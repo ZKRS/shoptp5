@@ -76,4 +76,11 @@ class Cate extends \think\Controller
         $this->assign('cate_find', $cate_find);
         return view('cate/update');
     }
+    public function updatehanddle(){
+        $post = request()->post();
+        $cate_upd_result = db('cate')->update($post);
+        if($cate_upd_result){
+            $this->success('分类修改成功','cate/catelist');
+        }
+    }
 }

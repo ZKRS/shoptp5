@@ -109,7 +109,8 @@
                 <div class="col-xs-12">
                     <!-- PAGE CONTENT BEGINS -->
 
-                    <form class="form-horizontal" role="form" action="{:url('cate/addhandle')}" method="post">
+                    <form class="form-horizontal" role="form" action="{:url('cate/updatehandle')}" method="post">
+                        <input type="hidden" name="id_cate" value="{$cate_find.id_cate}">
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right" for="cate_name"> 分类名称 </label>
 
