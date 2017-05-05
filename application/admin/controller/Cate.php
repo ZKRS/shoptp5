@@ -60,7 +60,7 @@ class Cate extends \think\Controller
     /**
      * 修改分类
      */
-    public function update($id_cate)
+    public function upd($id_cate)
     {
         if ($id_cate == "") {
             $this->redirect('cate/catelist');
@@ -76,11 +76,23 @@ class Cate extends \think\Controller
         $this->assign('cate_find', $cate_find);
         return view('cate/update');
     }
-    public function updatehanddle(){
+
+    /**
+     * 分类修改提交处理
+     */
+    public function updatehandle(){
         $post = request()->post();
         $cate_upd_result = db('cate')->update($post);
         if($cate_upd_result){
             $this->success('分类修改成功','cate/catelist');
+        }else{
+            $this->error('修改分类失败','cate/catelist');
         }
+    }
+    /**
+     * 分类删除操作
+     */
+    public function del(){
+
     }
 }
