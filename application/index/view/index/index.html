@@ -62,7 +62,7 @@
                         <div class="category" style="box-shadow:none ;margin-top: 2px;">
                             <ul class="category-list navTwo" id="js_climit_li">
                                 {volist name="cate_list" id="vo1"}
-                                <li>
+                                <li class="appliance js_toggle relative">
                                     <div class="category-info">
                                         <h3 class="category-name b-category-name"><i><img
                                                 src="__INDEX__/images/cake.png"></i><a class="ml-22"
@@ -74,20 +74,64 @@
                                             <div class="area-bg">
                                                 <div class="menu-srot">
                                                     <div class="sort-side">
-
                                                         <dl class="dl-sort">
                                                             {volist name="vo1['children']" id="vo2"}
-                                                            <dt ><span title="{$vo2.cate_name}">{$vo2.cate_name}</span>
-                                                            </dt>
+                                                            <dt ><span title="{$vo2.cate_name}">{$vo2.cate_name}</span></dt>
+                                                                {volist name="vo2['children']" id="vo3"}
+                                                                <dd><a title="{$vo3.cate_name}" href="#"><span>{$vo3.cate_name}</span></a></dd>
+                                                                {/volist}
+                                                            {/volist}
+                                                        </dl>
+                                                    </div>
+                                                    <!--<div class="brand-side">-->
+                                                    <!--<dl class="dl-sort">-->
+                                                    <!--<dt><span>实力商家</span></dt>-->
+                                                    <!--<dd><a rel="nofollow" title="呵官方旗舰店" target="_blank"-->
+                                                    <!--href="#" rel="nofollow"><span-->
+                                                    <!--class="red">呵官方旗舰店</span></a></dd>-->
+                                                    <!--<dd><a rel="nofollow" title="格瑞旗舰店" target="_blank" href="#"-->
+                                                    <!--rel="nofollow"><span>格瑞旗舰店</span></a></dd>-->
+                                                    <!--<dd><a rel="nofollow" title="飞彦大厂直供" target="_blank"-->
+                                                    <!--href="#" rel="nofollow"><span-->
+                                                    <!--class="red">飞彦大厂直供</span></a></dd>-->
+                                                    <!--<dd><a rel="nofollow" title="红e·艾菲妮" target="_blank"-->
+                                                    <!--href="#" rel="nofollow"><span>红e·艾菲妮</span></a></dd>-->
+                                                    <!--<dd><a rel="nofollow" title="本真旗舰店" target="_blank" href="#"-->
+                                                    <!--rel="nofollow"><span class="red">本真旗舰店</span></a>-->
+                                                    <!--</dd>-->
+                                                    <!--<dd><a rel="nofollow" title="杭派女装批发网" target="_blank"-->
+                                                    <!--href="#" rel="nofollow"><span-->
+                                                    <!--class="red">杭派女装批发网</span></a></dd>-->
+                                                    <!--</dl>-->
+                                                    <!--</div>-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <b class="arrow"></b>
+                                </li>
+                                {/volist}
+                                {volist name="cate_list" id="vo1"}
+                                <li class="appliance js_toggle relative">
+                                    <div class="category-info">
+                                        <h3 class="category-name b-category-name"><i><img
+                                                src="__INDEX__/images/cake.png"></i><a class="ml-22"
+                                                                                       title="点心">{$vo1.cate_name}</a>
+                                        </h3>
+                                        <em>&gt;</em></div>
+                                    <div class="menu-item menu-in top">
+                                        <div class="area-in">
+                                            <div class="area-bg">
+                                                <div class="menu-srot">
+                                                    <div class="sort-side">
+                                                        <dl class="dl-sort">
+                                                            {volist name="vo1['children']" id="vo2"}
+                                                            <dt ><span title="{$vo2.cate_name}">{$vo2.cate_name}</span></dt>
                                                             {volist name="vo2['children']" id="vo3"}
-                                                            <dd><a title="{$vo3.cate_name}" href="#">
-                                                                <span>{$vo3.cate_name}</span></a>
-                                                            </dd>
+                                                            <dd><a title="{$vo3.cate_name}" href="#"><span>{$vo3.cate_name}</span></a></dd>
                                                             {/volist}
                                                             {/volist}
                                                         </dl>
-
-
                                                     </div>
                                                     <!--<div class="brand-side">-->
                                                     <!--<dl class="dl-sort">-->

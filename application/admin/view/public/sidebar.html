@@ -1,6 +1,9 @@
 <div class="sidebar" id="sidebar">
     <script type="text/javascript">
-        try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+        try {
+            ace.settings.check('sidebar', 'fixed')
+        } catch (e) {
+        }
     </script>
 
     <div class="sidebar-shortcuts" id="sidebar-shortcuts">
@@ -170,18 +173,46 @@
                                 </li>
                             </ul>
                         </li>
+
                     </ul>
-                </li>
-            </ul>
-        </li>
 
-    </ul><!-- /.nav-list -->
+                </li><!--分类管理-->
+                <li>
+                    <a href="#" class="dropdown-toggle">
+                        <i class="icon-double-angle-right"></i>
 
-    <div class="sidebar-collapse" id="sidebar-collapse">
-        <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
-    </div>
+                        商品管理
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
 
-    <script type="text/javascript">
-        try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
-    </script>
+                    <ul class="submenu">
+                        <li>
+                            <a href="{:url('goods/')}">
+                                <i class="icon-leaf"></i>
+                                商品列表
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{:url('goods/add')}">
+                                <i class=icon-external-link></i>
+                                添加商品
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </li><!--商品管理-->
+            </ul><!-- /.nav-list -->
+
+            <div class="sidebar-collapse" id="sidebar-collapse">
+                <i class="icon-double-angle-left" data-icon1="icon-double-angle-left"
+                   data-icon2="icon-double-angle-right"></i>
+            </div>
+
+            <script type="text/javascript">
+                try {
+                    ace.settings.check('sidebar', 'collapsed')
+                } catch (e) {
+                }
+            </script>
 </div>

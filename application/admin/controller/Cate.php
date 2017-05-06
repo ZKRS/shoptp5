@@ -16,10 +16,12 @@ namespace app\admin\controller;
  */
 class Cate extends \think\Controller
 {
-    //分类列表
+    /**
+     * 跳转到分类列表页
+    */
     public function cateList()
     {
-        $cate_select = db('cate')->select();//db助手函数
+        $cate_select = db('cate')->order('cate_sort')->select();//db助手函数
         $cate_model = model('Cate');
         $cate_list = $cate_model->getChildrenId($cate_select);
         $cate_total = count($cate_list);
@@ -33,6 +35,10 @@ class Cate extends \think\Controller
         return view('cate/catelist');
     }
 
+    /**
+     * @return \think\response\View
+     * 跳转到添加分类页面
+     */
     public function add()
     {
         $cate_select = db('cate')->select();
@@ -106,16 +112,26 @@ class Cate extends \think\Controller
         //获取要删除类和及其全部子类
         $cate_select = db('cate')->select();
         $cate_model = model('Cate');
-        $cate_list = $cate_model->getChildrenId($cate_select,$id_cate);
+        $cate_list = $cate_model->getChildrenId($cate_select, $id_cate);
         $cate_list[] = $cate_find;
 //        dump($cate_list);
-        foreach ($cate_list as $key=>$value){
-            db('cate')->where('id_cate',$value['id_cate'])->delete();
+        foreach ($cate_list as $key => $value) {
+            db('cate')->where('id_cate', $value['id_cate'])->delete();
         }
     }
 
-
-
+    /**
+     * 分类排序
+     */
+    public function sort()
+    {
+//        dump(request()->post());
+        $post = request()->post();
+        foreach ($post as $key => $value) {
+            db('cate')->update(['id_cate' => $key, 'cate_sort' => $value]);
+        }
+        $this->redirect("cate/catelist");
+    }
 
 
 }

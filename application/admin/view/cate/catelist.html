@@ -180,10 +180,11 @@
                                                         <a href="#">{$vo.id_cate}</a>
                                                     </td>
                                                     <td class="hidden-480 ">
-                                                        <span class="label label-sm label-warning">{$vo.str}{$vo.cate_name}</span>
+                                                        <span {if condition="($vo.cate_pid == 0)" }
+                                                              class="label label-sm label-warning" {/if}>{$vo.str}{$vo.cate_name}</span>
                                                     </td>
                                                     <td class=" ">
-                                                        <input type="text" name="" value="{$vo.cate_sort}">
+                                                        <input type="text" name="{$vo.id_cate}" value="{$vo.cate_sort}">
 
                                                         </input>
                                                     </td>
@@ -246,12 +247,13 @@
                                                 </tbody><!--具体值-->
 
                                             </table>
-                                        </form><!--商品管理表格-->
-                                        <div class="clearfix form-actions">
-                                            <div class="col-md-offset-3 col-md-9">
-                                                <input type="submit" name="" value="分类排序" class="btn btn-info">
+                                            <div class="clearfix form-actions">
+                                                <div class="col-md-offset-3 col-md-9">
+                                                    <input type="submit" name="" value="分类排序" class="btn btn-info">
+                                                </div>
                                             </div>
-                                        </div>
+                                        </form><!--商品管理表格-->
+
                                     </div>
                                     {$show}
                                 </div>
