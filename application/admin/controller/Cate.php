@@ -80,19 +80,42 @@ class Cate extends \think\Controller
     /**
      * 分类修改提交处理
      */
-    public function updatehandle(){
+    public function updatehandle()
+    {
         $post = request()->post();
         $cate_upd_result = db('cate')->update($post);
-        if($cate_upd_result){
-            $this->success('分类修改成功','cate/catelist');
-        }else{
-            $this->error('修改分类失败','cate/catelist');
+        if ($cate_upd_result) {
+            $this->success('分类修改成功', 'cate/catelist');
+        } else {
+            $this->error('修改分类失败', 'cate/catelist');
         }
     }
-    /**
-     * 分类删除操作
-     */
-    public function del(){
 
+    /**
+     * 分类删除操作,删除及其子类的所有分类
+     */
+    public function del($id_cate)
+    {
+        if ($id_cate == "") {
+            $this->redirect('cate/catelist');
+        }
+        $cate_find = db('cate')->find($id_cate);
+        if ($cate_find == null) {
+            $this->redirect('cate/catelist');
+        }
+        //获取要删除类和及其全部子类
+        $cate_select = db('cate')->select();
+        $cate_model = model('Cate');
+        $cate_list = $cate_model->getChildrenId($cate_select,$id_cate);
+        $cate_list[] = $cate_find;
+//        dump($cate_list);
+        foreach ($cate_list as $key=>$value){
+            db('cate')->where('id_cate',$value['id_cate'])->delete();
+        }
     }
+
+
+
+
+
 }
