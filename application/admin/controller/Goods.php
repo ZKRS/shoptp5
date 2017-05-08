@@ -14,13 +14,65 @@ class Goods extends \think\Controller
     /**
      * 商品添加
      */
-    public function add(){
+    public function add()
+    {
+        if (session('goods_thumb')) {
+//            dump(session('goods_thumb'));
+            $url = str_replace(DS . 'shoptp' . DS . 'public', '.', session('goods_thumb'));
+//            dump($url);
+            if (file_exists($url)) {//防止手动删除至upload中的缩略图文件或者文件名改变
+                unlink($url);
+            }
+        }
+        session('goods_thumb', null);//刚进入到此界面时,要清空用户session信息
         $cate_select = db('cate')->select();
         $cate_model = model('Cate');
-        $cate_list = $cate_model->getChildrenId($cate_select,0);
-        $this->assign('cate_list',$cate_list);
+        $cate_list = $cate_model->getChildrenId($cate_select, 0);
+        $this->assign('cate_list', $cate_list);
         return view();
     }
 
+    /**
+     * jquery插件商品缩略图上传
+     * 上传完图片,没有提交的时候有session,提交结束后就要清空session
+     */
+    public function uploadthumb()
+    {
+        //获取表单上传的文件
+        $file = request()->file('goods_thumb');
+        //移动到框架应用根目录/public/uploads下
+        $info = $file->move(ROOT_PATH . 'public' . DS . 'upload');
+        if ($info) {
+            $address = DS . 'shoptp' . DS . 'public' . DS . 'upload' . DS . $info->getSaveName();
+            session('goods_thumb', $address);
+            return $address;
+        } else {
+            echo $file->getError();
+        }
+    }
 
+    /**
+     * 添加缩略图至表单上传处理
+     */
+    public function addhandle()
+    {
+        $post = request()->post();
+        $post['goods_thumb'] = session('goods_thumb');
+        dump($post);//打印得到的表单中的数据
+    }
+
+    /**
+     * 用户删除上传的图像
+     */
+    public function cancelthumb(){
+        if(request()->isAjax()){
+            if(session('goods_thumb')){
+                $url = str_replace(DS.'shoptp'.DS.'public','.',session('goods_thumb'));
+                if(file_exists($url)){
+                   unlink($$url);
+                }
+            }
+            session('goods_thumb',null);
+        }
+    }
 }
