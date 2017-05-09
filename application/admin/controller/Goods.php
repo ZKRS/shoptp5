@@ -30,8 +30,8 @@ class Goods extends \think\Controller
         $cate_list = $cate_model->getChildrenId($cate_select, 0);
         $this->assign('cate_list', $cate_list);
         //获取无限极分类列表
-        $cate_list1=$cate_model->getChildren($cate_select,0);
-        $this->assign('cate_list1',$cate_list1);
+        $cate_list1 = $cate_model->getChildren($cate_select, 0);
+        $this->assign('cate_list1', $cate_list1);
         return view();
     }
 
@@ -61,14 +61,21 @@ class Goods extends \think\Controller
     {
         $post = request()->post();
         $post['goods_thumb'] = session('goods_thumb');
+        $post['goods_status'] = isset($post['goods_status']) ? $post['goods_status'] : '0';
+        $post['goods_pid'] = isset($post['goods_pid']) ? $post['goods_pid'] : null;
+        $validate = validate('Goods');
+        if(!$validate->check($post)){
+            dump($validate->getError());
+        }
         dump($post);//打印得到的表单中的数据
-        session('goods_thumb',null);
+        session('goods_thumb', null);
     }
 
     /**
      * 用户删除上传的图像
      */
-    public function cancelthumb()
+    public
+    function cancelthumb()
     {
         if (request()->isAjax()) {
             if (session('goods_thumb')) {
@@ -82,9 +89,6 @@ class Goods extends \think\Controller
             return json(['status' => 'success', 'message' => 'cancel success']);
         }
     }
-
-
-
 
 
 }
