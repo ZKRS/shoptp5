@@ -143,7 +143,7 @@
                                                    name="goods_thumb">
 										</span>
                                 <a id="thumb_cancel" href="javascript:void(0)" class="btn btn-warning" role="button"
-                                   onclick="cancelUpload()" style="display:none">删除</a>
+                                   style="display:none">删除</a>
                             </div>
                         </div>
                         <div class="space-4"></div>
@@ -163,8 +163,14 @@
                             <label class="col-sm-3 control-label no-padding-right" for="goods_status"> 商品状态 </label>
 
                             <div class="col-sm-9">
-                                <input type="text" id="goods_status" name="goods_status" placeholder="输入商品状态"
-                                       class="col-xs-10 col-sm-5">
+                                <!--<input type="text" id="goods_status" name="goods_status" placeholder="输入商品状态"-->
+                                <!--class="col-xs-10 col-sm-5">-->
+                                <label>
+                                    <input id="goods_status" name="goods_status" value="1" checked="checked"
+                                           class="ace ace-switch ace-switch-7"
+                                           type="checkbox">
+                                    <span class="lbl"></span>
+                                </label>
                             </div>
                         </div>
                         <div class="space-4"></div>
@@ -189,15 +195,69 @@
                         </div>
                         <div class="space-4"></div>
 
+                        <!--<div class="form-group">-->
+                        <!--<label class="col-sm-3 control-label no-padding-right" for="goods_pid"> 所属分类 </label>-->
+                        <!--<div class="col-sm-4">-->
+                        <!--<select class="form-control" id="goods_pid" name="goods_pid">-->
+                        <!--<option value="0">顶级分类</option>-->
+                        <!--{volist name="cate_list" id="vo"}-->
+                        <!--<option value="{$vo.id_cate}">{$vo.str}{$vo.cate_name}</option>-->
+                        <!--{/volist}-->
+                        <!--</select>-->
+                        <!--</div>-->
+                        <!--</div>-->
                         <div class="form-group">
-                            <label class="col-sm-3 control-label no-padding-right" for="goods_pid"> 所属分类 </label>
-                            <div class="col-sm-4">
-                                <select class="form-control" id="goods_pid" name="goods_pid">
-                                    <option value="0">顶级分类</option>
-                                    {volist name="cate_list" id="vo"}
-                                    <option value="{$vo.id_cate}">{$vo.str}{$vo.cate_name}</option>
+                            <label class="col-sm-3 control-label no-padding-right"> 所属分类 </label>
+                            <div class="col-sm-3">
+                                <!--每一个顶级分类及其子类对应于一个三级分类列表-->
+                                <ul class="nav nav-list  ">
+                                    <!--商品分类-->
+                                    {volist name="cate_list1" id="vo1"}
+                                    <li>
+                                        <a href="#" class="dropdown-toggle">
+                                            <span class="menu-text">{$vo1.cate_name} </span>
+
+                                            <b class="arrow icon-angle-down"></b>
+                                        </a>
+
+                                        <ul class="submenu" style="display: none;">
+                                            {volist name="$vo1.children" id="vo2"}
+                                            <li>
+                                                <a href="#" class="dropdown-toggle">
+                                                    {$vo2.cate_name}
+                                                    <b class="arrow icon-angle-down"></b>
+                                                </a>
+
+                                                <ul class="submenu" style="display:none;">
+                                                    <div class="col-xs-4">
+                                                        {volist name="$vo2.children" id="vo3"}
+                                                        <!--<select class="form-control" id="goods_pid" name="goods_pid">-->
+                                                        <!---->
+                                                        <!--<option value="{$vo3.id_cate}">{$vo3.cate_name}</option>-->
+                                                        <!--</select>-->
+                                                        <li>&nbsp;&nbsp;&nbsp;
+                                                            <input name="goods_pid" value="{$vo3.id_cate}" type="radio">
+                                                            {$vo3.cate_name}
+                                                            </input>
+                                                        </li>
+                                                        {/volist}
+                                                    </div>
+
+                                                </ul>
+                                            </li><!--分类管理-->
+                                            {/volist}
+
+                                        </ul><!-- /.nav-list -->
+                                        <script type="text/javascript">
+                                            try {
+                                                ace.settings.check('sidebar', 'collapsed')
+                                            } catch (e) {
+                                            }
+                                        </script>
+                                    </li>
                                     {/volist}
-                                </select>
+                                </ul>
+
                             </div>
                         </div>
                         <div class="space-4"></div>
@@ -335,10 +395,11 @@
 
     });
 </script>
-<!-- /jquery-file-upliad -->
+
+/jquery-file-upliad
 <script type="text/javascript">
     $(function () {
-        $('#thumb_cancel').click(function() {
+        $('#thumb_cancel').click(function () {
             $.ajax({
                 url: '{:url("admin/goods/cancelthumb")}',
                 type: 'post',
@@ -348,6 +409,7 @@
                     $("#thumb_progress").css('width', 0);
                     $("#thumb_progress").html('');
                     $("#img").attr("src", "__ADMIN__/assets/images/upload.png");
+//                    alert(data);
                 }
             });
         });
