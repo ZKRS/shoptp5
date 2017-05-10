@@ -55,7 +55,7 @@ class Goods extends \think\Controller
     }
 
     /**
-     * 添加缩略图至表单上传处理
+     * 添加商品表单上传处理
      */
     public function addhandle()
     {
@@ -67,7 +67,13 @@ class Goods extends \think\Controller
         if(!$validate->check($post)){
             dump($validate->getError());
         }
-        dump($post);//打印得到的表单中的数据
+        dump($post);//打印得到的表单中的数据,键值对数组:字段名=>值
+        $goods_add_result = db('goods')->insert($post);
+        if($goods_add_result){
+            $this->success('添加商品成功','cate/catelist');
+        }else{
+            $this->error('添加商品失败','');
+        }
         session('goods_thumb', null);
     }
 
