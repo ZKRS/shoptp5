@@ -20,7 +20,7 @@ class Goods extends \think\Controller
 //            dump(session('goods_thumb'));
             $url = str_replace(DS . 'shoptp' . DS . 'public', '.', session('goods_thumb'));
 //            dump($url);
-            if (file_exists($url)) {//防止手动删除至upload中的缩略图文件或者文件名改变
+            if (file_exists($url)) {//防止手动删除upload中的缩略图文件或者文件名改变
                 unlink($url);
             }
         }
@@ -64,24 +64,26 @@ class Goods extends \think\Controller
         $post['goods_status'] = isset($post['goods_status']) ? $post['goods_status'] : '0';
         $post['goods_pid'] = isset($post['goods_pid']) ? $post['goods_pid'] : null;
         $validate = validate('Goods');
-        if(!$validate->check($post)){
-            dump($validate->getError());
+        if (!$validate->check($post)) {
+//            dump($validate->getError());
+            $this->error($validate->getError(), 'goods/add');
         }
+
         dump($post);//打印得到的表单中的数据,键值对数组:字段名=>值
         $goods_add_result = db('goods')->insert($post);
-        if($goods_add_result){
-            $this->success('添加商品成功','cate/catelist');
-        }else{
-            $this->error('添加商品失败','');
-        }
         session('goods_thumb', null);
+        if ($goods_add_result) {
+            $this->success('添加商品成功', 'goods/goodslist');
+        } else {
+            $this->error('添加商品失败', 'goods/goodslist');
+        }
+
     }
 
     /**
      * 用户删除上传的图像
      */
-    public
-    function cancelthumb()
+    public function cancelthumb()
     {
         if (request()->isAjax()) {
             if (session('goods_thumb')) {
@@ -91,10 +93,22 @@ class Goods extends \think\Controller
                 }
             }
             session('goods_thumb', null);
-
             return json(['status' => 'success', 'message' => 'cancel success']);
         }
     }
 
+    /**
+     * 商品列表页
+     */
+    public function goodslist()
+    {
+        $goods_select = db('goods')->select();
+        foreach ($goods_select as $key => $value) {
+            $value['goods_price'] = $value['goods_price'] / 100;
+        }
+
+        $this->assign('goods_select', $goods_select);
+        return view('goods/goodslist');
+    }
 
 }
