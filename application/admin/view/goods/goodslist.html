@@ -80,7 +80,7 @@
                         <i class="icon-home home-icon"></i>
                         <a href="#">首页</a>
                     </li>
-                    <li class="active">控制台</li>
+                    <li class="active">商品管理</li>
                 </ul><!-- .breadcrumb -->
 
                 <div class="nav-search" id="nav-search">
@@ -97,10 +97,10 @@
             <div class="page-content">
                 <div class="page-header">
                     <h1>
-                        控制台
+                        商品管理
                         <small>
                             <i class="icon-double-angle-right"></i>
-                            查看
+                            商品列表
                         </small>
                     </h1>
                 </div><!-- /.page-header -->
@@ -194,40 +194,36 @@
                                                         <a href="#">{$vo.goods_id}</a>
                                                     </td>
                                                     <td class="hidden-480 ">
-                                                        <span {if condition="($vo.goods_pid == 0)" }
-                                                              class="label label-sm label-warning" {/if}>{$vo.goods_name}</span>
+                                                        <span >{$vo.goods_name}</span>
                                                     </td>
                                                     <td class="hidden-480 ">
                                                         <img src="{$vo.goods_thumb}" width="100">
                                                     </td>
                                                     <td class="hidden-480 ">
-                                                        <span {if condition="($vo.goods_pid == 0)" }
-                                                              class="label label-sm label-warning" {/if}>{$vo.goods_price}</span>
+                                                        <span>{$vo.goods_price}</span>
                                                     </td>
                                                     <td class="hidden-480 ">
-                                                        <span {if condition="($vo.goods_pid == 0)" }
-                                                              class="label label-sm label-warning" {/if}>{$vo.goods_status}</span>
+                                                        <span {if condition="$vo.goods_status == 0" }
+                                                              class="label label-sm label-warning">未上架{else/}>已上架{/if}</span>
                                                     </td>
                                                     <td class="hidden-480 ">
-                                                        <span {if condition="($vo.goods_pid == 0)" }
-                                                              class="label label-sm label-warning" {/if}>{$vo.goods_sales}</span>
+                                                        <span >{$vo.goods_sales}</span>
                                                     </td>
                                                     <td class="hidden-480 ">
-                                                        <span {if condition="($vo.goods_pid == 0)" }
-                                                              class="label label-sm label-warning" {/if}>{$vo.goods_inventory}</span>
+                                                        <span >{$vo.goods_inventory}</span>
                                                     </td>
                                                     <td class="hidden-480 ">
-                                                        <span {if condition="($vo.goods_pid == 0)" }
-                                                              class="label label-sm label-warning" {/if}>{$vo.goods_pid}</span>
+                                                        <span >{$vo.cate_name}</span>
                                                     </td>
                                                     <td class=" ">
                                                         <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
-                                                            <a class="green">
+                                                            <a class="green"
+                                                               href="{:url('goods/update',array('goods_id'=>$vo.goods_id))}">
                                                                 <i class="icon-pencil bigger-130"></i>
                                                             </a>
 
                                                             <a class="red"
-                                                               href="javascript:if(confirm('确认删除?')) location=''">
+                                                               href="javascript:if(confirm('确认删除?')) location='{:url('goods/del',array('goods_id'=>$vo.goods_id))}'">
                                                                 <i class="icon-trash bigger-130"></i>
                                                             </a>
                                                         </div>

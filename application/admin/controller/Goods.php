@@ -98,17 +98,63 @@ class Goods extends \think\Controller
     }
 
     /**
-     * 商品列表页
+     * 商品列表显示
      */
     public function goodslist()
     {
-        $goods_select = db('goods')->select();
+        $goods_select = db('goods')->join('shop_cate', 'shop_cate.id_cate = shop_goods.goods_pid')->select();
+//        dump($goods_select);die;
         foreach ($goods_select as $key => $value) {
-            $value['goods_price'] = $value['goods_price'] / 100;
+            $goods_select[$key]['goods_price'] = $value['goods_price'] / 100;
         }
 
         $this->assign('goods_select', $goods_select);
         return view('goods/goodslist');
+    }
+
+    /**
+     * 商品列表中删除商品信息
+     */
+    public function del()
+    {
+
+    }
+
+    /**
+     * 商品列表中修改某商品条目
+     */
+    public function update($goods_id = "")
+    {
+
+        if ($goods_id == 0) {
+            $this->redirect('goods/goodslist');
+//            return view('goods/goodslist');
+        }
+        $goods_find = db('goods')->find($goods_id);
+//        dump($goods_find);die;
+        if (empty($goods_find)) {
+            $this->redirect('goods/goodslist');
+        }
+        session('goods_thumb',$goods_find['goods_thumb']);//创建session,
+        $cate_select = db('cate')->select();
+        $cate_model = model('Cate');
+        $cate_list1 = $cate_model->getChildren($cate_select, 0);
+        $cate_in = $cate_model->getFatherId($cate_select, $goods_find['goods_pid']);
+//        dump($cate_in);die;
+        $cate_father = array("one" => $cate_in[2]['id_cate'], "two" => $cate_in[1]['id_cate'], "three" => $cate_in[0]['id_cate']);
+//        dump($cate_father);die;
+        $this->assign('cate_father', $cate_father);
+        $this->assign('goods_find', $goods_find);
+        $this->assign('cate_list1', $cate_list1);
+
+        return view('goods/update');
+    }
+
+    /**
+     * 用户修改商品信息提交后修改至数据库
+     */
+    public function updatehandle(){
+
     }
 
 }

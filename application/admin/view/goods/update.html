@@ -1,0 +1,399 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>控制台 - Bootstrap后台管理系统模版Ace下载</title>
+    <meta name="keywords" content="Bootstrap模版,Bootstrap模版下载,Bootstrap教程,Bootstrap中文"/>
+    <meta name="description" content="JS代码网提供Bootstrap模版,Bootstrap教程,Bootstrap中文翻译等相关Bootstrap插件下载"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- basic styles -->
+    <link href="__ADMIN__/assets/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="__ADMIN__/assets/css/font-awesome.min.css"/>
+
+    <!--[if IE 7]>
+    <link rel="stylesheet" href="__ADMIN__/assets/css/font-awesome-ie7.min.css"/>
+    <![endif]-->
+
+    <!-- page specific plugin styles -->
+
+    <!-- fonts -->
+
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300"/>
+
+    <!-- ace styles -->
+
+    <link rel="stylesheet" href="__ADMIN__/assets/css/ace.min.css"/>
+    <link rel="stylesheet" href="__ADMIN__/assets/css/ace-rtl.min.css"/>
+    <link rel="stylesheet" href="__ADMIN__/assets/css/ace-skins.min.css"/>
+
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="__ADMIN__/assets/css/ace-ie.min.css"/>
+    <![endif]-->
+
+    <!-- inline styles related to this page -->
+
+    <!-- ace settings handler -->
+
+    <script src="__ADMIN__/assets/js/ace-extra.min.js"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+    <!--[if lt IE 9]>
+    <script src="__ADMIN__/assets/js/html5shiv.js"></script>
+    <script src="__ADMIN__/assets/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<!--顶部导航栏-->
+{include file="public/navbar"}
+<!--/顶部导航栏-->
+
+<!-- main-container -->
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <div class="main-container-inner">
+        <a class="menu-toggler" id="menu-toggler" href="#">
+            <span class="menu-text"></span>
+        </a>
+
+        {include file="public/sidebar"}<!--/sidebar-->
+
+        <div class="main-content">
+            <div class="breadcrumbs" id="breadcrumbs">
+                <script type="text/javascript">
+                    try {
+                        ace.settings.check('breadcrumbs', 'fixed')
+                    } catch (e) {
+                    }
+                </script>
+
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home home-icon"></i>
+                        <a href="#">首页</a>
+                    </li>
+                    <li class="active">控制台</li>
+                </ul><!-- .breadcrumb -->
+
+                <div class="nav-search" id="nav-search">
+                    <form class="form-search">
+								<span class="input-icon">
+									<input type="text" placeholder="Search ..." class="nav-search-input"
+                                           id="nav-search-input" autocomplete="off"/>
+									<i class="icon-search nav-search-icon"></i>
+								</span>
+                    </form>
+                </div><!-- #nav-search -->
+            </div>
+
+            <div class="page-content">
+                <div class="page-header">
+                    <h1>
+                        商品管理
+                        <small>
+                            <i class="icon-double-angle-right"></i>
+                            商品列表
+                        </small>
+                    </h1>
+                </div><!-- /.page-header -->
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- PAGE CONTENT BEGINS -->
+
+                    <form class="form-horizontal" role="form" action="{:url('goods/updatehandle')}" method="post"
+                          enctype="multipart/form-data">
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="goods_name"> 商品名称 </label>
+
+                            <div class="col-sm-9">
+                                <input type="text" id="goods_name" name="goods_name"
+                                       placeholder="{$goods_find.goods_name}"
+                                       class="col-xs-10 col-sm-5">
+                            </div>
+                        </div>
+                        <div class="space-4"></div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="goods_thumb"> 商品缩略图 </label>
+
+                            <div class="col-xs-4">
+                                <img src="{$goods_find.goods_thumb}" id="img" name="img" width="130">
+                                <div class="progress">
+                                    <div id="thumb_progress" class="progress-bar" style="width:0%;"></div>
+                                </div>
+                                <span id="thumb_upload" class="btn btn-primary fileinput-button " style="display: none;">
+	    									<span >上传</span>
+											<input id="goods_thumb" placeholder="" class="" type="file"
+                                                   name="goods_thumb">
+										</span>
+                                <a id="thumb_cancel" href="javascript:void(0)" class="btn btn-warning" role="button"
+                                   style="display:">删除</a>
+                            </div>
+                        </div>
+                        <div class="space-4"></div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="goods_price"> 商品价格 </label>
+
+                            <div class="col-sm-9">
+                                <input type="text" id="goods_price" name="goods_price"
+                                       placeholder="{$goods_find.goods_price}"
+                                       class="col-xs-10 col-sm-5">
+                            </div>
+                        </div>
+                        <div class="space-4"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="goods_status"> 商品状态 </label>
+
+                            <div class="col-sm-9">
+                                <!--<input type="text" id="goods_status" name="goods_status" placeholder="输入商品状态"-->
+                                <!--class="col-xs-10 col-sm-5">-->
+                                <label>
+                                    <input id="goods_status" name="goods_status" value="{$goods_find.goods_status}" {if
+                                           condition="($goods_find.goods_status == 1)" } checked="checked" {/if}
+                                    class="ace ace-switch ace-switch-7"
+                                    type="checkbox">
+                                    <span class="lbl"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="space-4"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="goods_inventory"> 商品库存 </label>
+
+                            <div class="col-sm-9">
+                                <input type="text" id="goods_inventory" name="goods_inventory"
+                                       value="{$goods_find.goods_inventory}" placeholder="{$goods_find.goods_inventory}"
+                                       class="col-xs-10 col-sm-5">
+                            </div>
+                        </div>
+                        <div class="space-4"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="goods_sales"> 商品销量 </label>
+
+                            <div class="col-sm-9">
+                                <input type="text" id="goods_sales" name="goods_sales" value="{$goods_find.goods_sales}"
+                                       placeholder="{$goods_find.goods_sales}"
+                                       class="col-xs-10 col-sm-5">
+                            </div>
+                        </div>
+                        <div class="space-4"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right"> 所属分类 </label>
+                            <div class="col-sm-3">
+                                <!--每一个顶级分类及其子类对应于一个三级分类列表-->
+                                <ul class="nav nav-list">
+                                    <!--商品分类-->
+                                    {volist name="cate_list1" id="vo1"}
+                                        <li>
+                                            <a href="#" class="dropdown-toggle">
+                                                <span class="menu-text">{$vo1.cate_name} </span>
+
+                                                <b class="arrow icon-angle-down"></b>
+                                            </a>
+
+                                            <ul class="submenu" {if condition="($cate_father.three eq $vo1.id_cate)" }} style="display: block;" {else/} style="display:none;"{/if} >
+                                            {volist name="$vo1.children" id="vo2"}
+                                                <li >
+                                                    <a href="#" class="dropdown-toggle">
+                                                        {$vo2.cate_name}
+                                                        <b class="arrow icon-angle-down"></b>
+                                                    </a>
+
+                                                    <ul class="submenu" {if condition="($cate_father.two eq $vo2.id_cate)" }} style="display: block;" {else/} style="display:none;"{/if}>
+                                                        <div class="col-xs-4">
+
+                                                            {volist name="$vo2.children" id="vo3"}
+                                                            <li>&nbsp;&nbsp;&nbsp;
+                                                                <input name="goods_pid" value="{$vo3.id_cate}" type="radio" {if condition="($vo3.id_cate == $goods_find.goods_pid)" }checked="checked" {/if}>
+                                                                {$vo3.cate_name}
+                                                                </input>
+                                                            </li>
+                                                            {/volist}
+                                                        </div>
+                                                    </ul>
+                                                </li>
+                                            {/volist}
+                                            </ul>
+
+                                        </li>
+                                    {/volist}
+                                 </ul>
+
+                             </div>
+                         </div>
+
+                        <div class="space-4"></div>
+
+                        <div class="clearfix form-actions">
+                            <div class="col-md-offset-3 col-md-9">
+                                <input type="submit" name="" value="修改商品" class="btn btn-info">
+                            </div>
+                        </div>
+
+                 </form>
+
+            </div ><!-- /.col -->
+        </div><!--表单-->
+    </div><!-- /.main-content -->
+
+    <div class="ace-settings-container" id="ace-settings-container">
+        <div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
+            <i class="icon-cog bigger-150"></i>
+        </div>
+
+        <div class="ace-settings-box" id="ace-settings-box">
+            <div>
+                <div class="pull-left">
+                    <select id="skin-colorpicker" class="hide">
+                        <option data-skin="default" value="#438EB9">#438EB9</option>
+                        <option data-skin="skin-1" value="#222A2D">#222A2D</option>
+                        <option data-skin="skin-2" value="#C6487E">#C6487E</option>
+                        <option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
+                    </select>
+                </div>
+                <span>&nbsp; 选择皮肤</span>
+            </div>
+
+            <div>
+                <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-navbar"/>
+                <label class="lbl" for="ace-settings-navbar"> 固定导航条</label>
+            </div>
+
+            <div>
+                <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-sidebar"/>
+                <label class="lbl" for="ace-settings-sidebar"> 固定滑动条</label>
+            </div>
+
+            <div>
+                <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-breadcrumbs"/>
+                <label class="lbl" for="ace-settings-breadcrumbs">固定面包屑</label>
+            </div>
+
+            <div>
+                <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-rtl"/>
+                <label class="lbl" for="ace-settings-rtl">切换到左边</label>
+            </div>
+
+            <div>
+                <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-add-container"/>
+                <label class="lbl" for="ace-settings-add-container">
+                    切换窄屏
+                    <b></b>
+                </label>
+            </div>
+        </div>
+    </div><!-- /#ace-settings-container -->
+</div><!-- /.main-container-inner -->
+
+<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+    <i class="icon-double-angle-up icon-only bigger-110"></i>
+</a>
+</div>
+<!-- /.main-container -->
+
+<script src='__ADMIN__/assets/js/jquery-2.0.3.min.js'>
+</script>
+
+<!-- <![endif]-->
+
+<!--[if IE]>
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='__ADMIN__/assets/js/jquery-1.10.2.min.js'>" + "<" + "script>");
+</script>
+<![endif]-->
+
+<script type="text/javascript">
+    if ("ontouchend" in document) document.write("<script src='__ADMIN__/assets/js/jquery.mobile.custom.min.js'>" + "<" + "script>");
+</script>
+<script src="__ADMIN__/assets/js/bootstrap.min.js"></script>
+<script src="__ADMIN__/assets/js/typeahead-bs2.min.js"></script>
+
+<!-- page specific plugin scripts -->
+
+<!--[if lte IE 8]>
+<script src="__ADMIN__/assets/js/excanvas.min.js"></script>
+<![endif]-->
+
+<script src="__ADMIN__/assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="__ADMIN__/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="__ADMIN__/assets/js/jquery.slimscroll.min.js"></script>
+<script src="__ADMIN__/assets/js/jquery.easy-pie-chart.min.js"></script>
+<script src="__ADMIN__/assets/js/jquery.sparkline.min.js"></script>
+<script src="__ADMIN__/assets/js/flot/jquery.flot.min.js"></script>
+<script src="__ADMIN__/assets/js/flot/jquery.flot.pie.min.js"></script>
+<script src="__ADMIN__/assets/js/flot/jquery.flot.resize.min.js"></script>
+
+<!-- ace scripts -->
+
+<script src="__ADMIN__/assets/js/ace-elements.min.js"></script>
+<script src="__ADMIN__/assets/js/ace.min.js"></script>
+
+<!-- inline scripts related to this page -->
+
+<!-- jqeury-file-upload -->
+<!-- <link href="__ADMIN__/css/bootstrap.min.css" rel="stylesheet">   -->
+<link rel="stylesheet" href="__ADMIN__/jfu/css/jquery.fileupload.css">
+<link rel="stylesheet" href="__ADMIN__/jfu/css/jquery.fileupload-ui.css">
+<!-- <script src="__ADMIN__/js/jquery-2.0.3.min.js"></script>  -->
+<script src="__ADMIN__/jfu/js/vendor/jquery.ui.widget.js"></script>
+<script src="__ADMIN__/jfu/js/jquery.fileupload.js"></script>
+<script src="__ADMIN__/jfu/js/jquery.iframe-transport.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $("#goods_thumb").fileupload({
+            url: '{:url("admin/goods/uploadthumb")}',
+            sequentialUploads: true
+        }).bind('fileuploadprogress', function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $("#thumb_progress").css('width', progress + '%');
+            $("#thumb_progress").html(progress + '%');
+        }).bind('fileuploaddone', function (e, data) {
+            console.log(data);
+            $("#img").attr("src", data.result);
+            $("#thumb_upload").css({display: "none"});
+            $("#thumb_cancel").css({display: ""});
+        });
+
+    });
+</script>
+
+/jquery-file-upliad
+<script type="text/javascript">
+    $(function () {
+        $('#thumb_cancel').click(function () {
+            $.ajax({
+                url: '{:url("admin/goods/cancelthumb")}',
+                type: 'post',
+                success: function (data) {
+                    $("#thumb_upload").css({display: ""});
+                    $("#thumb_cancel").css({display: "none"});
+                    $("#thumb_progress").css('width', 0);
+                    $("#thumb_progress").html('');
+                    $("#img").attr("src", "__ADMIN__/assets/images/upload.png");
+//                    alert(data);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
+

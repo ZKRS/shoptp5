@@ -38,4 +38,36 @@ class Cate extends \think\Model
         }
         return $arr;
     }
+
+    /**
+     * @param $cate_list
+     * @param $id
+     * 由子类id遍历全部父类
+     */
+    public function getFather($cate_list, $pid)
+    {
+        $arr = array();
+        foreach ($cate_list as $key =>$value){
+            if($value['id_cate'] == $pid){
+                $value['father'] = $this->getFather($cate_list,$value['cate_pid']);
+                $arr[] = $value;
+            }
+        }
+        return $arr;
+    }
+
+    /**
+     *由子类id遍历全部父类
+     */
+    public function getFatherId($cate_list, $pid)
+    {
+        static $arr = array();
+        foreach ($cate_list as $key => $value) {
+            if ($value['id_cate'] == $pid) {
+                array_unshift($arr, $value);
+                $this->getFatherId($cate_list, $value['cate_pid']);
+            }
+        }
+        return $arr;
+    }
 }
