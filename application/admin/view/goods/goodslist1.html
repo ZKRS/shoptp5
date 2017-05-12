@@ -79,7 +79,7 @@
                         <i class="icon-home home-icon"></i>
                         <a href="#">首页</a>
                     </li>
-                    <li class="active">控制台</li>
+                    <li class="active">商品管理</li>
                 </ul><!-- .breadcrumb -->
 
                 <div class="nav-search" id="nav-search">
@@ -96,10 +96,10 @@
             <div class="page-content">
                 <div class="page-header">
                     <h1>
-                        控制台
+                        商品管理
                         <small>
                             <i class="icon-double-angle-right"></i>
-                            查看
+                            商品列表
                         </small>
                     </h1>
                 </div><!-- /.page-header -->
@@ -129,20 +129,13 @@
                                                     <input type="text" aria-controls="sample-table-2"></label></div>
                                             </div>
                                         </div>
-                                        <form action="{:url('cate/sort')}" method="post">
+                                        <form action="" method="post">
                                             <table id="sample-table-2"
                                                    class="table table-striped table-bordered table-hover dataTable"
                                                    aria-describedby="sample-table-2_info">
                                                 <thead>
 
                                                 <tr role="row">
-                                                    <th class="center sorting_disabled" role="columnheader" rowspan="1"
-                                                        colspan="1" aria-label="" style="width: 74px;">
-                                                        <label>
-                                                            <input type="checkbox" class="ace">
-                                                            <span class="lbl"></span>
-                                                        </label>
-                                                    </th>
                                                     <th class="sorting" role="columnheader" tabindex="0"
                                                         aria-controls="sample-table-2" rowspan="1" colspan="1"
                                                         aria-label="Domain: activate to sort column ascending"
@@ -151,12 +144,38 @@
                                                     <th class="sorting" role="columnheader" tabindex="0"
                                                         aria-controls="sample-table-2" rowspan="1" colspan="1"
                                                         aria-label="Price: activate to sort column ascending"
-                                                        style="width: 137px;">分类名称
+                                                        style="width: 137px;">商品名称
                                                     </th>
+
                                                     <th class="sorting" role="columnheader" tabindex="0"
                                                         aria-controls="sample-table-2" rowspan="1" colspan="1"
                                                         aria-label="Domain: activate to sort column ascending"
-                                                        style="width: 203px;">排序
+                                                        style="width: 203px;">缩略图
+                                                    </th>
+                                                    <th class="sorting" role="columnheader" tabindex="0"
+                                                        aria-controls="sample-table-2" rowspan="1" colspan="1"
+                                                        aria-label="Price: activate to sort column ascending"
+                                                        style="width: 137px;">商品价格
+                                                    </th>
+                                                    <th class="sorting" role="columnheader" tabindex="0"
+                                                        aria-controls="sample-table-2" rowspan="1" colspan="1"
+                                                        aria-label="Price: activate to sort column ascending"
+                                                        style="width: 137px;">商品状态
+                                                    </th>
+                                                    <th class="sorting" role="columnheader" tabindex="0"
+                                                        aria-controls="sample-table-2" rowspan="1" colspan="1"
+                                                        aria-label="Price: activate to sort column ascending"
+                                                        style="width: 137px;">商品销量
+                                                    </th>
+                                                    <th class="sorting" role="columnheader" tabindex="0"
+                                                        aria-controls="sample-table-2" rowspan="1" colspan="1"
+                                                        aria-label="Price: activate to sort column ascending"
+                                                        style="width: 137px;">商品库存
+                                                    </th>
+                                                    <th class="sorting" role="columnheader" tabindex="0"
+                                                        aria-controls="sample-table-2" rowspan="1" colspan="1"
+                                                        aria-label="Price: activate to sort column ascending"
+                                                        style="width: 137px;">商品所属分类
                                                     </th>
                                                     <th class="sorting_disabled" role="columnheader" rowspan="1"
                                                         colspan="1"
@@ -167,35 +186,43 @@
                                                 </thead><!--字段标题-->
 
                                                 <tbody role="alert" aria-live="polite" aria-relevant="all">
-                                                {volist name="cate_list" id="vo"}
+                                                {volist name="goods_select" id="vo"}
                                                 <tr class="odd">
-                                                    <td class="center  sorting_1">
-                                                        <label>
-                                                            <input type="checkbox" class="ace">
-                                                            <span class="lbl"></span>
-                                                        </label>
-                                                    </td>
+
                                                     <td class=" ">
-                                                        <a href="#">{$vo.id_cate}</a>
+                                                        <a href="#">{$vo.goods_id}</a>
                                                     </td>
                                                     <td class="hidden-480 ">
-                                                        <span {if condition="($vo.cate_pid == 0)" }
-                                                              class="label label-sm label-warning" {/if}>{$vo.str}{$vo.cate_name}</span>
+                                                        <span >{$vo.goods_name}</span>
                                                     </td>
-                                                    <td class=" ">
-                                                        <input type="text" name="{$vo.id_cate}" value="{$vo.cate_sort}">
-
-                                                        </input>
+                                                    <td class="hidden-480 ">
+                                                        <img src="{$vo.goods_thumb}" width="100">
+                                                    </td>
+                                                    <td class="hidden-480 ">
+                                                        <span>{$vo.goods_price}</span>
+                                                    </td>
+                                                    <td class="hidden-480 ">
+                                                        <span {if condition="$vo.goods_status == 0" }
+                                                              class="label label-sm label-warning">未上架{else/}>已上架{/if}</span>
+                                                    </td>
+                                                    <td class="hidden-480 ">
+                                                        <span >{$vo.goods_sales}</span>
+                                                    </td>
+                                                    <td class="hidden-480 ">
+                                                        <span >{$vo.goods_inventory}</span>
+                                                    </td>
+                                                    <td class="hidden-480 ">
+                                                        <span >{$vo.cate_name}</span>
                                                     </td>
                                                     <td class=" ">
                                                         <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
                                                             <a class="green"
-                                                               href="{:url('cate/upd',array('id_cate'=>$vo.id_cate))}">
+                                                               href="{:url('goods/update',array('goods_id'=>$vo.goods_id))}">
                                                                 <i class="icon-pencil bigger-130"></i>
                                                             </a>
 
                                                             <a class="red"
-                                                               href="javascript:if(confirm('确认删除?')) location='{:url('cate/del',array('id_cate'=>$vo.id_cate))}'">
+                                                               href="javascript:if(confirm('确认删除?')) location='{:url('goods/del',array('goods_id'=>$vo.goods_id))}'">
                                                                 <i class="icon-trash bigger-130"></i>
                                                             </a>
                                                         </div>
@@ -246,15 +273,15 @@
                                                 </tbody><!--具体值-->
 
                                             </table>
-                                            <div class="clearfix form-actions">
-                                                <div class="col-md-offset-3 col-md-9">
-                                                    <input type="submit" name="" value="分类排序" class="btn btn-info">
-                                                </div>
-                                            </div>
+                                            <!--<div class="clearfix form-actions">-->
+                                                <!--<div class="col-md-offset-3 col-md-9">-->
+                                                    <!--<input type="submit" name="" value="分类排序" class="btn btn-info">-->
+                                                <!--</div>-->
+                                            <!--</div>-->
                                         </form><!--商品管理表格-->
 
                                     </div>
-                                    {$show}
+
                                 </div>
                             </div>
                         </div>

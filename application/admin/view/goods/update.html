@@ -18,7 +18,6 @@
 
     <!-- fonts -->
 
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300"/>
 
     <!-- ace styles -->
 
@@ -111,12 +110,12 @@
 
                     <form class="form-horizontal" role="form" action="{:url('goods/updatehandle')}" method="post"
                           enctype="multipart/form-data">
-
+                        <input type="hidden" name="goods_id" value="{$goods_find.goods_id}">
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right" for="goods_name"> 商品名称 </label>
 
                             <div class="col-sm-9">
-                                <input type="text" id="goods_name" name="goods_name"
+                                <input type="text" id="goods_name" name="goods_name" value="{$goods_find.goods_name}"
                                        placeholder="{$goods_find.goods_name}"
                                        class="col-xs-10 col-sm-5">
                             </div>
@@ -128,7 +127,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="goods_thumb"> 商品缩略图 </label>
 
                             <div class="col-xs-4">
-                                <img src="{$goods_find.goods_thumb}" id="img" name="img" width="130">
+                                <img {if condition="($Think.session.goods_thumb)"} src="{$goods_find.goods_thumb}"{else/} src="__ADMIN__/assets/images/upload.png"{/if} id="img" name="img" width="130">
                                 <div class="progress">
                                     <div id="thumb_progress" class="progress-bar" style="width:0%;"></div>
                                 </div>
@@ -148,7 +147,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="goods_price"> 商品价格 </label>
 
                             <div class="col-sm-9">
-                                <input type="text" id="goods_price" name="goods_price"
+                                <input type="text" id="goods_price" name="goods_price" value="{$goods_find.goods_price}"
                                        placeholder="{$goods_find.goods_price}"
                                        class="col-xs-10 col-sm-5">
                             </div>

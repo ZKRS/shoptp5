@@ -32,6 +32,7 @@ class Goods extends \think\Controller
         //获取无限极分类列表
         $cate_list1 = $cate_model->getChildren($cate_select, 0);
         $this->assign('cate_list1', $cate_list1);
+
         return view();
     }
 
@@ -63,19 +64,38 @@ class Goods extends \think\Controller
         $post['goods_thumb'] = session('goods_thumb');
         $post['goods_status'] = isset($post['goods_status']) ? $post['goods_status'] : '0';
         $post['goods_pid'] = isset($post['goods_pid']) ? $post['goods_pid'] : null;
-        $validate = validate('Goods');
-        if (!$validate->check($post)) {
-//            dump($validate->getError());
-            $this->error($validate->getError(), 'goods/add');
-        }
+        $result = [];
 
-        dump($post);//打印得到的表单中的数据,键值对数组:字段名=>值
+        $validate = validate('Goods');
+        if (!$validate->batch()->check($post)) {
+            $this->assign("goods", $post);
+            $result = [
+                'status' => 2,
+                'message' => "发生错误",
+                'errors' => $validate->getError()
+            ];
+
+            return json($result);
+        }
         $goods_add_result = db('goods')->insert($post);
         session('goods_thumb', null);
         if ($goods_add_result) {
-            $this->success('添加商品成功', 'goods/goodslist');
+            $result = [
+                'status' => 1,
+                'message' => "添加成功",
+                'errors' => [],
+                'url' => url('admin/goods/goodslist', ['goods_pid' => $post['goods_pid']])
+            ];
+
+            return json($result);
         } else {
-            $this->error('添加商品失败', 'goods/goodslist');
+            $result = [
+                'status' => 0,
+                'message' => "添加失败",
+                'errors' => []
+            ];
+
+            return json($result);
         }
 
     }
@@ -100,28 +120,58 @@ class Goods extends \think\Controller
     /**
      * 商品列表显示
      */
-    public function goodslist()
+    public function goodslist($goods_pid = "")
     {
-        $goods_select = db('goods')->join('shop_cate', 'shop_cate.id_cate = shop_goods.goods_pid')->select();
 //        dump($goods_select);die;
-        foreach ($goods_select as $key => $value) {
-            $goods_select[$key]['goods_price'] = $value['goods_price'] / 100;
-        }
+//        foreach ($goods_select as $key => $value) {
+//            $goods_select[$key]['goods_price'] = $value['goods_price'] / 100;
+//        }
 
-        $this->assign('goods_select', $goods_select);
+        $cate_select = db('cate')->select();
+        $cate_model = model('Cate');
+        $cate_list1 = $cate_model->getChildren($cate_select, 0);
+        $this->assign('cate_list1', $cate_list1);
+
+        $cate_find = db("cate")->find($goods_pid);
+        if ($cate_find) {
+            $goods_select = db('goods')->where('goods_pid', 'eq', $goods_pid)->join('shop_cate', 'shop_cate.id_cate = shop_goods.goods_pid')->select();
+//            dump($goods_select);die;
+            $this->assign('goods_select', $goods_select);
+        } else {
+            $this->assign('goods_select', "");
+        }
         return view('goods/goodslist');
     }
 
     /**
      * 商品列表中删除商品信息
      */
-    public function del()
+    public function del($goods_id = "")
     {
+        if ($goods_id == "") {
+            $this->redirect("goods/goodslist");
+        }
+        $goods_find = db("goods")->find($goods_id);
+//        dump($goods_find);die;
+        if ($goods_id == null) {
+            $this->redirect("goods/goodslist");
+        }
+        if ($goods_find['goods_thumb']) {//删除缩略图文件
+            $url = str_replace(DS . "shoptp" . DS . "public", ".", $goods_find['goods_thumb']);
+            if (file_exists($url)) {
+                unlink($url);
+                $goods_del_results = db("goods")->delete($goods_id);//delete方法返回删除影响的条数,没有删除返回0
+                $this->success('删除此记录成功', url('admin/goods/goodslist', ['goods_pid' => $goods_find['goods_pid']]));
+            }
+        } else {
+            $this->error('删除此记录失败', url('admin/goods/goodslist'));
+
+        }
 
     }
 
     /**
-     * 商品列表中修改某商品条目
+     * 商品列表中修改某页面
      */
     public function update($goods_id = "")
     {
@@ -135,7 +185,13 @@ class Goods extends \think\Controller
         if (empty($goods_find)) {
             $this->redirect('goods/goodslist');
         }
-        session('goods_thumb',$goods_find['goods_thumb']);//创建session,
+        if (session('goods_thumb') != $goods_find['goods_thumb']) {//如果有session,就把session图片路径对应的图片删除(错误的信息)
+            $url = str_replace(DS . 'shoptp' . DS . 'public', '.', session('goods_thumb'));
+            if (file_exists($url)) {
+                unlink($url);
+            }
+        }
+        session('goods_thumb', $goods_find['goods_thumb']);//创建session,
         $cate_select = db('cate')->select();
         $cate_model = model('Cate');
         $cate_list1 = $cate_model->getChildren($cate_select, 0);
@@ -153,7 +209,26 @@ class Goods extends \think\Controller
     /**
      * 用户修改商品信息提交后修改至数据库
      */
-    public function updatehandle(){
+    public function updatehandle()
+    {
+        $post = request()->post();
+//        dump($post);die;
+        $post['goods_thumb'] = session('goods_thumb');
+        $post['goods_status'] = isset($post['goods_status']) ? $post['goods_status'] : "0";
+        $post['goods_pid'] = isset($post['goods_pid']) ? $post['goods_pid'] : null;
+        //验证修改后的信息是否合法
+        $validate = validate("Goods");
+        if (!$validate->check($post)) {
+            $this->error($validate->getError(), 'goods/goodslist');
+        }
+        $goods_update_result = db('goods')->update($post);
+        if ($goods_update_result) {
+            session('goods_thumb', null);
+            $this->success("商品修改成功", url("admin/goods/goodslist", ["goods_pid"=>$post['goods_pid']]));
+        } else {
+            session('goods_thumb', null);
+            $this->error("商品修改失败", "goods/goodslist");
+        }
 
     }
 

@@ -18,7 +18,7 @@
 
     <!-- fonts -->
 
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300"/>
+    <!--<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300"/>-->
 
     <!-- ace styles -->
 
@@ -45,6 +45,7 @@
 </head>
 
 <body>
+
 <!--顶部导航栏-->
 {include file="public/navbar"}
 <!--/顶部导航栏-->
@@ -108,16 +109,17 @@
             <div class="row">
                 <div class="col-xs-12">
                     <!-- PAGE CONTENT BEGINS -->
-
                     <form class="form-horizontal" role="form" action="{:url('goods/addhandle')}" method="post"
-                          enctype="multipart/form-data">
+                          enctype="multipart/form-data" id="goods_form">
 
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right" for="goods_name"> 商品名称 </label>
 
                             <div class="col-sm-9">
                                 <input type="text" id="goods_name" name="goods_name" placeholder="输入商品名称"
-                                       class="col-xs-10 col-sm-5">
+                                       class="col-xs-10 col-sm-5" value="">
+                                <span class="help-block error_message"></span>
+
                             </div>
                         </div>
                         <div class="space-4"></div>
@@ -144,6 +146,8 @@
 										</span>
                                 <a id="thumb_cancel" href="javascript:void(0)" class="btn btn-warning" role="button"
                                    style="display:none">删除</a>
+                                <span class="help-block error_message"></span>
+
                             </div>
                         </div>
                         <div class="space-4"></div>
@@ -155,6 +159,7 @@
                             <div class="col-sm-9">
                                 <input type="text" id="goods_price" name="goods_price" placeholder="输入商品价格"
                                        class="col-xs-10 col-sm-5">
+                                <span class="help-block error_message"></span>
                             </div>
                         </div>
                         <div class="space-4"></div>
@@ -181,7 +186,10 @@
                             <div class="col-sm-9">
                                 <input type="text" id="goods_inventory" name="goods_inventory" placeholder="输入商品库存"
                                        class="col-xs-10 col-sm-5">
+                                <span class="help-block error_message"></span>
+
                             </div>
+
                         </div>
                         <div class="space-4"></div>
 
@@ -191,6 +199,7 @@
                             <div class="col-sm-9">
                                 <input type="text" id="goods_sales" name="goods_sales" placeholder="输入商品销量"
                                        class="col-xs-10 col-sm-5">
+                                <span class="help-block error_message"></span>
                             </div>
                         </div>
                         <div class="space-4"></div>
@@ -231,12 +240,8 @@
                                                 <ul class="submenu" style="display:none;">
                                                     <div class="col-xs-4">
                                                         {volist name="$vo2.children" id="vo3"}
-                                                        <!--<select class="form-control" id="goods_pid" name="goods_pid">-->
-                                                        <!---->
-                                                        <!--<option value="{$vo3.id_cate}">{$vo3.cate_name}</option>-->
-                                                        <!--</select>-->
                                                         <li>&nbsp;&nbsp;&nbsp;
-                                                            <input name="goods_pid" value="{$vo3.id_cate}" type="radio">
+                                                            <input name="goods_pid" id="goods_pid" value="{$vo3.id_cate}" type="radio">
                                                             {$vo3.cate_name}
                                                             </input>
                                                         </li>
@@ -256,6 +261,7 @@
                                         </script>
                                     </li>
                                     {/volist}
+                                    <span class="help-block error_message"></span>
                                 </ul>
 
                             </div>
@@ -263,8 +269,11 @@
                         <div class="space-4"></div>
 
                         <div class="clearfix form-actions">
-                            <div class="col-md-offset-3 col-md-9">
-                                <input type="submit" name="" value="添加商品" class="btn btn-info">
+                            <div class="col-md-offset-3 col-md-1">
+                                <input type="button" id="submitAdd" name="" value="添加商品" class="btn btn-info">
+                            </div>
+                            <div class="col-md-1">
+                                <span class="alert alert-success alert_message hidden"></span>
                             </div>
                         </div>
 
@@ -413,6 +422,46 @@
                 }
             });
         });
+    });
+</script>
+
+<script>
+
+    $("#submitAdd").unbind("click");
+    $("#submitAdd").bind("click", function () {
+        var action = $("#goods_form").attr("action");
+        var data   = $("#goods_form").serialize();
+        $.ajax(action, {
+            type: "post",
+            data: data,
+            success: function(result) {
+                var status  = result.status;
+                var message = result.message;
+                var url     = result.url;
+                //validate error
+                if (status == 2) {
+                    var errors = result.errors;
+                    for(var e in errors) {
+                        var formgroup = $("#" + e).closest(".form-group");
+                        formgroup.addClass("has-error");
+                        formgroup.find("span.error_message").text(errors[e]);
+                    }
+
+                }  else if (status == 1) {
+                    // add success
+                    $(".alert_message").removeClass("hidden").text(message);
+                    setTimeout(function() {
+                        location.href = url;
+                    }, 1000);
+
+                } else {
+                    // add error
+                    alert(message);
+                }
+
+
+            }
+        })
     });
 </script>
 </body>

@@ -23,7 +23,7 @@
             <?php break;?>
             <?php case 0:?>
             <h1>:(</h1>
-            <p class="error"><?php echo(strip_tags($msg));?></p>
+            <p class="error"><?php echo(strip_tags($msg)); ?></p>
             <?php break;?>
         <?php } ?>
         <p class="detail"></p>
