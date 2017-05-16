@@ -104,7 +104,7 @@
                     </h1>
                 </div><!-- /.page-header -->
                 <div class="form-group">
-                    <label class="col-sm-2 control-label no-padding-right"><h2>所属分类:</h2></label>
+                    <label class="col-sm-2 control-label no-padding-right"><h2>所属分类:{if condition = "($goods_select != null) " }{$goods_select[0]['cate_name']}{/if}</h2></label>
                     <div class="col-sm-12">
                         <!--每一个顶级分类及其子类对应于一个三级分类列表-->
                         <ul class="nav nav-list  ">
