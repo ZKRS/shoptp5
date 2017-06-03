@@ -17,8 +17,8 @@ class Goods extends \think\Controller
             $this->redirect('index/index');
         }
         $goods_select = db('goods')->where("goods_status", "eq", 1)->where('goods_pid', 'eq', $goods_pid)->paginate(1);
-        dump($goods_select);
-        die;
+//        dump($goods_select);
+//        die;
         $this->assign('goods_select', $goods_select);
         return view('goods/goodslist');
     }
