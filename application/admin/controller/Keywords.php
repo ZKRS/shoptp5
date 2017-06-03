@@ -29,10 +29,31 @@ class Keywords extends \think\Controller
     /**
      * 给用户添加自定义关键字
      */
-    public function add(){
+    public function add()
+    {
         return view();
     }
 
+    /**
+     * 用户添加分类post方式,提交给服务器
+     * 服务器端接收并存入数据库
+     */
+    public function addhandle()
+    {
+        $post = request()->post();
+        $validate = validate('keywords');
+        //TODO://使用Ajax来异步验证,不用来回跳转的方式
+        if (!$validate->check($post)) {
+            $this->error($validate->getError(),'keywords/add');
+        }
+        $keywords_add_result = db('keywords')->insert($post);
+        if ($keywords_add_result) {
+            $this->success('关键字添加成功', 'keywords/keywordslist');
+        } else {
+            $this->error('关键字添加失败', 'keywords/keywordslsit');
+        }
 
+//        dump($post);
+    }
 
 }
