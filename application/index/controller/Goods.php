@@ -25,4 +25,4 @@ class Goods extends \think\Controller
 }
 
 
-}
+
