@@ -12,6 +12,7 @@
 namespace app\admin\model;
 class Cate extends \think\Model
 {
+    protected $resultSetType = 'collection';
     //由父类id得到全部子类
     public function getChildrenId($cate_list, $pid = 0, $level = 1)
     {

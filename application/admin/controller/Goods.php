@@ -127,8 +127,40 @@ class Goods extends \think\Controller
 //            $goods_select[$key]['goods_price'] = $value['goods_price'] / 100;
 //        }
 
-        $cate_select = db('cate')->select();
+
+//        foreach ($goods_keywords as $key => $value) {
+//            dump($value->keywords_name);
+//        }
+
+        $goods_model = model('Goods');
+//        $goods_get = $goods_model->get(10);
+//        $goods_keywords = $goods_get->keywords;
+//        $goods_keywords_toArray = $goods_keywords->toArray();
+        $goods_all = $goods_model->all();
+        $goods_all_toArray = $goods_all->toArray();
+        $goods_info = array();
+        foreach ($goods_all_toArray as $key => $value) {
+            $goods_get = $goods_model->get($value['goods_id']);
+            $goods_keywords = $goods_get->keywords;
+            $goods_keywords_toArray = $goods_keywords->toArray();
+            $value['keywords'] = $goods_keywords_toArray;
+            $goods_info[] = $value;
+        }
+        dump($goods_info);
+        die;
+
+//        $cate_model = model('Cate');
+//        $cate_all = $cate_model->all();
+//        $cate_all_toArray = collection($cate_all) ->toArray();
+//        dump($cate_all_toArray);
+////        foreach ($cate_all as $key => $value) {
+////            dump($value -> cate_name);
+////        }
+//        die;
+
+
         $cate_model = model('Cate');
+        $cate_select = db('cate')->select();
         $cate_list1 = $cate_model->getChildren($cate_select, 0);
         $this->assign('cate_list1', $cate_list1);
 
@@ -224,7 +256,7 @@ class Goods extends \think\Controller
         $goods_update_result = db('goods')->update($post);
         if ($goods_update_result) {
             session('goods_thumb', null);
-            $this->success("商品修改成功", url("admin/goods/goodslist", ["goods_pid"=>$post['goods_pid']]));
+            $this->success("商品修改成功", url("admin/goods/goodslist", ["goods_pid" => $post['goods_pid']]));
         } else {
             session('goods_thumb', null);
             $this->error("商品修改失败", "goods/goodslist");
