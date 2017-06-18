@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2017-06-04 22:33:30
+Date: 2017-06-18 22:33:13
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -123,7 +123,7 @@ INSERT INTO `shop_goods` VALUES ('10', 'Apple iPhone 7 Plus (A1661) 128G 亮黑�
 INSERT INTO `shop_goods` VALUES ('11', 'Apple MacBook Pro 15.4英寸笔记本电脑 银色(Core i7 处理器/16GB内存/256GB SSD闪存/Retina屏 MJLQ2CH/A)', '\\shoptp\\public\\upload\\20170512\\3367e7f69764c47750a55671764d19ed.jpg', '13088.00', '1', '12', '125', '31');
 INSERT INTO `shop_goods` VALUES ('12', '小米(MI)Air 13.3英寸全金属超轻薄笔记本电脑(i5-6200U 8G 256G PCIE固态硬盘 940MX独显 FHD WIN10)银', '\\shoptp\\public\\upload\\20170512\\56eefc8d7c44e722d39af0c3188351be.jpg', '4999.00', '1', '245', '1298', '31');
 INSERT INTO `shop_goods` VALUES ('21', '华硕（ASUS）ROG STRIX-GTX1080TI-O11G-GAMING 1569-1708MHz 11G/11100MHz GDDR5X PCI-E3.0显卡', '\\shoptp\\public\\upload\\20170512\\d0d61fdd871ce84db03b8a6272258c67.jpg', '6399.00', '1', '123', '257', '34');
-INSERT INTO `shop_goods` VALUES ('22', '夏普（SHARP）LCD-70SU665A 70英寸 日本原装液晶面板 4K超高清 智能液晶电视', '\\shoptp\\public\\upload\\20170512\\a67ae13a88eda6122f0b9733c1497da2.jpg', '9499.00', '1', '1234', '4567', '15');
+INSERT INTO `shop_goods` VALUES ('22', '夏普（SHARP）LCD-70SU665A 70英寸 日本原装液晶面板 4K超高清 智能液晶电视', '\\shoptp\\public\\upload\\20170614\\0e6d32d551a1af63eef2309a12daba56.jpg', '9499.00', '1', '1234', '4567', '15');
 
 -- ----------------------------
 -- Table structure for shop_goods_keywords
