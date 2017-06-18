@@ -71,4 +71,7 @@ class Cate extends \think\Model
         }
         return $arr;
     }
+    public function goods(){
+        return $this->belongsTo('Goods');
+    }
 }

@@ -133,21 +133,31 @@ class Goods extends \think\Controller
 //        }
 
         $goods_model = model('Goods');
+        $cate_model = model('Cate');
+        $cate_select = db('cate')->select();
+        $cate_list1 = $cate_model->getChildren($cate_select, 0);
+        $this->assign('cate_list1', $cate_list1);
+        $cate_find = db("cate")->find($goods_pid);
 //        $goods_get = $goods_model->get(10);
 //        $goods_keywords = $goods_get->keywords;
 //        $goods_keywords_toArray = $goods_keywords->toArray();
-        $goods_all = $goods_model->all();
-        $goods_all_toArray = $goods_all->toArray();
-        $goods_info = array();
-        foreach ($goods_all_toArray as $key => $value) {
-            $goods_get = $goods_model->get($value['goods_id']);
-            $goods_keywords = $goods_get->keywords;
-            $goods_keywords_toArray = $goods_keywords->toArray();
-            $value['keywords'] = $goods_keywords_toArray;
-            $goods_info[] = $value;
-        }
-        dump($goods_info);
-        die;
+//        $goods_all = $goods_model->all();
+//        dump($goods_all);die;
+//        $goods_all_toArray = $goods_all->toArray();
+//        dump($goods_all_toArray);die;
+//        $goods_info = array();
+//        foreach ($goods_all_toArray as $key => $value) {
+//            $goods_get = $goods_model->get($value['goods_id']);
+//            $goods_keywords = $goods_get->keywords;
+//            $goods_keywords_toArray = $goods_keywords->toArray();
+//            $value['keywords'] = $goods_keywords_toArray;
+//            $goods_cate = $goods_get->cate;
+//            $goods_cate_toArray = $goods_cate->toArray();
+//            $value['cate_name'] = $goods_cate_toArray["cate_name"];
+//            $goods_info[] = $value;
+//        }
+//        $this->assign('goods_info', $goods_info);
+//        dump($goods_info);die;
 
 //        $cate_model = model('Cate');
 //        $cate_all = $cate_model->all();
@@ -159,19 +169,40 @@ class Goods extends \think\Controller
 //        die;
 
 
-        $cate_model = model('Cate');
-        $cate_select = db('cate')->select();
-        $cate_list1 = $cate_model->getChildren($cate_select, 0);
-        $this->assign('cate_list1', $cate_list1);
-
-        $cate_find = db("cate")->find($goods_pid);
         if ($cate_find) {
-            $goods_select = db('goods')->where('goods_pid', 'eq', $goods_pid)->join('shop_cate', 'shop_cate.id_cate = shop_goods.goods_pid')->select();
+//            $goods_select = db('goods')->where('goods_pid', 'eq', $goods_pid)->join('shop_cate', 'shop_cate.id_cate = shop_goods.goods_pid')->select();
 //            dump($goods_select);die;
-            $this->assign('goods_select', $goods_select);
+//            $this->assign('goods_select', $goods_select);
+            $goods_all = $goods_model->all(function ($query) use ($goods_pid) {
+                $query->where('goods_pid', 'eq', $goods_pid);
+            });
+            $this->assign('cate_find', $cate_find);
         } else {
-            $this->assign('goods_select', "");
+//            $this->assign('goods_select', "");
+            $goods_all = $goods_model->all();
+            $this->assign('cate_find', '');
         }
+        $goods_all_toArray = $goods_all->toArray();
+        $goods_info = array();
+        foreach ($goods_all_toArray as $key => $value) {
+            $goods_get = $goods_model->get($value['goods_id']);
+            $goods_keywords = $goods_get->keywords;
+            $goods_keywords_toArray = $goods_keywords->toArray();
+            $value['keywords'] = $goods_keywords_toArray;
+            $goods_cate = $goods_get->cate;
+            $goods_cate_toArray = $goods_cate->toArray();
+            $value['cate_name'] = $goods_cate_toArray['cate_name'];
+            $goods_info[] = $value;
+        }
+        $this->assign('goods_info', $goods_info);
+        $goods_total = count($goods_info);
+        $page_class = new \app\admin\controller\Page($goods_total, 4);
+        $show = $page_class->fpage();
+        $limit = $page_class->setlimit();
+        $limit = explode(',',$limit);
+        $list = array_slice($goods_info,$limit[0],$limit[1]);
+        $this->assign('show',$show);
+        $this->assign('goods_info',$list);
         return view('goods/goodslist');
     }
 
@@ -262,6 +293,31 @@ class Goods extends \think\Controller
             $this->error("商品修改失败", "goods/goodslist");
         }
 
+    }
+    public function keywordsAddHanddle(){
+        $post = request()->post();
+        $goods_keywords = $post['goods_id'];
+        if(empty($goods_keywords)){
+            $this->error('关键字不能为空','goods/goodslist');
+        }
+        $keywords_find = db('keywords')->where('keywords_name','eq',$goods_keywords)->find();
+        if(empty($keywords_find)){
+            $this->error('请先添加关键字','keywords/add');
+        }
+
+//        $this->display();
+//        dump($goods_id);die;
+    }
+    public function keywordsDelHanddle(){
+
+    }
+    public function keywordsAjax(){
+        if(request()->isAjax()){
+            $post=request()->post();
+            $post_val = $post['val'];
+            $keywords_like = db('keywords')->where('keywords_name','like','%'.$post_val.'%')->limit(4)->select();
+            return $keywords_like;
+        }
     }
 
 }
