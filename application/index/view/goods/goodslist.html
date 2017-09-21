@@ -94,14 +94,15 @@
 							<div class="search-content">
 								<div class="sort">
 									<li class="first"><a title="综合">综合排序</a></li>
-									<li><a title="销量">销量排序</a></li>
-									<li><a title="价格">价格优先</a></li>
+									<li><a title="销量" href="{:url('goods/goodslist',array('goods_pid'=>$goods_pid,'goods_order'=>'goods_sales'))}">销量优先</a></li>
+									<li><a title="价格最高" href="{:url('goods/goodslist',array('goods_pid'=>$goods_pid,'goods_order'=>'goods_price_asc'))}">价格最高</a></li>
+									<li><a title="价格最低" href="{:url('goods/goodslist',array('goods_pid'=>$goods_pid,'goods_order'=>'goods_price_desc'))}">价格最低</a></li>
 									<li class="big"><a title="评价" href="#">评价为主</a></li>
 								</div>
 								<div class="clear"></div>
 
 								<ul class="am-avg-sm-2 am-avg-md-3 am-avg-lg-4 boxes">
-									{volist name = "goods_select" id = "vo"}
+									{volist name = "goods_info" id = "vo"}
 									<li>
 										<div class="i-pic limit">
 											<img src="{$vo.goods_thumb}" />
@@ -168,7 +169,7 @@
 							<div class="clear"></div>
 							<!--分页 -->
 							<div class="am-pagination am-pagination-right" id="page_num">
-								{$goods_select->render()}
+								{$show}
 							</div>
 
 						</div>

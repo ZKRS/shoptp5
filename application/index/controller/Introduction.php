@@ -11,7 +11,7 @@ namespace app\index\controller;
 
 class Introduction extends \think\Controller
 {
-    public function introduction(){
+    public function index(){
         return view('introduction\introduction');
     }
 }

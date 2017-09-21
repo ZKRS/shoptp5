@@ -20,6 +20,7 @@ class Goods extends Validate
     protected $rule = [
         'goods_name' => 'require|max:90',
         'goods_thumb' => 'require',
+        'goods_after_price' => 'float',
         'goods_price' => 'require|egt:1|float',
         'goods_sales' => 'require|egt:0|integer',
         'goods_inventory' => 'require|egt:0|integer',
@@ -28,13 +29,18 @@ class Goods extends Validate
     protected $message = [
         'goods_name.require' => '请输入商品名称',
         'goods_thumb.require' => '请选择图片',
-        'goods_price.require' =>'请输入商品价格',
+        'goods_price.require' => '请输入商品价格',
         'goods_sales.require' => '请输入商品销量',
-        'goods_inventory.require' =>'请输入商品库存',
+        'goods_inventory.require' => '请输入商品库存',
         'goods_pid.require' => '请选择商品分类'
 
     ];
-
+    //    自定义验证规则
+//    protected function checkGoodsAfterPrice($value,$rule)
+//    {
+//        return $rule == ($value >= $goods_price)? true : '促销价格不能大于原价格';
+//
+//    }
 }
 
 ?>

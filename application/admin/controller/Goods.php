@@ -64,15 +64,17 @@ class Goods extends \think\Controller
         $post['goods_thumb'] = session('goods_thumb');
         $post['goods_status'] = isset($post['goods_status']) ? $post['goods_status'] : '0';
         $post['goods_pid'] = isset($post['goods_pid']) ? $post['goods_pid'] : null;
+        $post['goods_after_price'] = empty($post['goods_after_price'])?'0':$post['goods_after_price'];
         $result = [];
-
         $validate = validate('Goods');
-        if (!$validate->batch()->check($post)) {
+        if (!$validate->batch()->check($post) || ($post['goods_after_price']>=$post['goods_price'])) {
+            $errors = $validate->getError();
+            $errors['goods_after_price'] = "促销价格不能大于等于原价格";
             $this->assign("goods", $post);
             $result = [
                 'status' => 2,
                 'message' => "发生错误",
-                'errors' => $validate->getError()
+                'errors' => $errors
             ];
 
             return json($result);
@@ -182,7 +184,8 @@ class Goods extends \think\Controller
             $goods_all = $goods_model->all();
             $this->assign('cate_find', '');
         }
-        $goods_all_toArray = $goods_all->toArray();
+//        dump($goods_all);die;
+        $goods_all_toArray = $goods_all;
         $goods_info = array();
         foreach ($goods_all_toArray as $key => $value) {
             $goods_get = $goods_model->get($value['goods_id']);
@@ -224,6 +227,7 @@ class Goods extends \think\Controller
             if (file_exists($url)) {
                 unlink($url);
                 $goods_del_results = db("goods")->delete($goods_id);//delete方法返回删除影响的条数,没有删除返回0
+                $goods_keywords_del_result = db("goods_keywords")->where("goods_id","eq",$goods_id)->delete();//删除商品与关键字对应关系
                 $this->success('删除此记录成功', url('admin/goods/goodslist', ['goods_pid' => $goods_find['goods_pid']]));
             }
         } else {
@@ -294,22 +298,65 @@ class Goods extends \think\Controller
         }
 
     }
+
+    /**
+     * 商品关键字添加,如果关键字已经存在就添加到shop_goods_keywords表中,商品id 对应 关键字id
+     */
     public function keywordsAddHanddle(){
         $post = request()->post();
-        $goods_keywords = $post['goods_id'];
-        if(empty($goods_keywords)){
-            $this->error('关键字不能为空','goods/goodslist');
-        }
-        $keywords_find = db('keywords')->where('keywords_name','eq',$goods_keywords)->find();
-        if(empty($keywords_find)){
-            $this->error('请先添加关键字','keywords/add');
-        }
+        $goods_id = array_keys($post)[0];
+        $keywords_name = array_values($post)[0];
+//        dump($goods_keywords);die;
 
-//        $this->display();
-//        dump($goods_id);die;
+        if(empty($keywords_name)){//用户没有输入关键字
+            $this->error('关键字不能为空','goods/goodslist','',1);
+        }
+        $keywords_find = db('keywords')->where('keywords_name','eq',$keywords_name)->find();
+        if(empty($keywords_find)){//用户输入关键字不存在数据库中
+            $this->error('请先添加关键字','keywords/add',"",1);
+        }
+        $keywords_id  = $keywords_find["keywords_id"];
+        $goods_keywords_find = db("goods_keywords")->where("goods_id=$goods_id")->where("keywords_id=$keywords_id")->find();
+        if(!empty($goods_keywords_find)){//用户添加的关键字,商品已经添加过了
+            $this->redirect("goods/goodslist");
+        }
+        $goods_model = model("goods");
+        $goods = $goods_model->get($goods_id);//得到要添加关键字的商品
+        /**
+         * 增加关联的中间表数据
+         *      attach方法参数
+         *          1. data :可以是数组 / 关联模型对象 / 关联对象的主键
+         * */
+        $goods->keywords()->attach($keywords_id);
+        $this->redirect("goods/goodslist");
     }
-    public function keywordsDelHanddle(){
 
+    /**
+     * @param string $goods_id
+     * @param string $keywords_name
+     * 删除商品的某个关键字
+     * 通过get方式把商品id和关键字名传过来,不安全
+     *                                  可以更改url中的数据就能删除关联
+     *
+     */
+    public function keywordsDelHanddle($goods_id="",$keywords_name=""){
+        if(empty($goods_id)||empty($keywords_name)){
+            $this->redirect("goods/goodslilst");
+        }
+        $goods_find = db("goods")->find($goods_id);
+//        dump($goods_find);die;
+        if(empty($goods_id)){
+            $this->redirect("goods/goodslist");
+        }
+        $keywords_find = db("keywords")->where("keywords_name","eq",$keywords_name)->find();
+        if(empty($keywords_find)){
+            $this->redirect("goods/goodslist");
+        }
+        $keywords_id = $keywords_find["keywords_id"];
+        $goods_model = model("goods");
+        $goods = $goods_model->get($goods_id);
+        $goods->keywords()->detach($keywords_id);
+        $this->redirect("goods/goodslist");
     }
     public function keywordsAjax(){
         if(request()->isAjax()){
